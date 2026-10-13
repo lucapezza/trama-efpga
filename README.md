@@ -12,7 +12,6 @@ trama-efpga/
 │   └── basic_primitives.sv
 ├── test/
 │   ├── basic_primitives_tb.sv
-│   ├── controlled_latches_tb.sv
 │   ├── run_checks.sh
 │   └── test_guide.md
 ├── tools/
@@ -59,7 +58,7 @@ Run both stages from the repository root:
 sh test/run_checks.sh
 ```
 
-Current verification uses Verilator for RTL lint and Icarus Verilog for four-state behavioral simulation. The basic-primitives and controlled-latches benches form the current runnable regression. Synthesis and CI workflows are still pending.
+Current verification uses Verilator for RTL lint and Icarus Verilog for four-state behavioral simulation. The single basic-primitives bench covers all five primitives and forms the current runnable regression. Synthesis and CI workflows are still pending.
 
 ## SKY130 analysis notes
 

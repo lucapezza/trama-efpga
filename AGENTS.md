@@ -5,7 +5,7 @@
 trama-efpga is an embedded FPGA project in early development. Behavioral mux2, mux4, plain latch, active-low-reset latch, and active-low-set latch modules are implemented in `basic_primitives.sv`.
 
 - `rtl/`: synthesizable mux and latch variants in `basic_primitives.sv`.
-- `test/`: self-checking hardware tests in `basic_primitives_tb.sv` and `controlled_latches_tb.sv`.
+- `test/`: self-checking hardware tests for all five primitives in `basic_primitives_tb.sv`.
 - `tools/`: future supporting software tools and their tests.
 - `docs/`: architecture notes and design decisions.
 - `README.md`: project overview, layout, and development status.

@@ -46,12 +46,10 @@ fi
 
 if [ "$mode" = all ] || [ "$mode" = test ]; then
     mkdir -p build
-    for bench in basic_primitives controlled_latches; do
-        iverilog -g2012 -Wall -s "${bench}_tb" -o "build/${bench}.vvp" \
-            rtl/basic_primitives.sv \
-            "test/${bench}_tb.sv"
-        vvp "build/${bench}.vvp"
-    done
+    iverilog -g2012 -Wall -s basic_primitives_tb -o build/basic_primitives.vvp \
+        rtl/basic_primitives.sv \
+        test/basic_primitives_tb.sv
+    vvp build/basic_primitives.vvp
 fi
 
 # End of file

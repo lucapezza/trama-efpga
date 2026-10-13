@@ -17,6 +17,22 @@ module basic_primitives_tb;
     logic       latch_enable_tb;
     wire        latch_result_tb;
 
+    logic controlled_latch_data_tb;
+    logic controlled_latch_enable_tb;
+    logic controlled_latch_reset_n_tb;
+    logic controlled_latch_set_n_tb;
+    wire controlled_latch_reset_result_tb;
+    wire controlled_latch_set_result_tb;
+
+    latch_reset latch_reset_dut (
+        .data_in(controlled_latch_data_tb), .enable_in(controlled_latch_enable_tb),
+        .reset_n_in(controlled_latch_reset_n_tb), .data_out(controlled_latch_reset_result_tb)
+    );
+    latch_set latch_set_dut (
+        .data_in(controlled_latch_data_tb), .enable_in(controlled_latch_enable_tb),
+        .set_n_in(controlled_latch_set_n_tb), .data_out(controlled_latch_set_result_tb)
+    );
+
     mux2 mux2_dut (
         .a0_in(mux2_data_tb[0]), .a1_in(mux2_data_tb[1]),
         .select_in(mux2_select_tb), .data_out(mux2_result_tb)
@@ -78,6 +94,18 @@ module basic_primitives_tb;
     task automatic check_latch_tb(input logic expected_in_tb);
         if (latch_result_tb !== expected_in_tb)
             $fatal(1, "Latch: expected %b, got %b", expected_in_tb, latch_result_tb);
+    endtask
+
+    task automatic check_controlled_latches_tb(
+        input logic expected_reset_in_tb,
+        input logic expected_set_in_tb
+    );
+        if (controlled_latch_reset_result_tb !== expected_reset_in_tb)
+            $fatal(1, "Reset latch: expected %b, got %b",
+                expected_reset_in_tb, controlled_latch_reset_result_tb);
+        if (controlled_latch_set_result_tb !== expected_set_in_tb)
+            $fatal(1, "Set latch: expected %b, got %b",
+                expected_set_in_tb, controlled_latch_set_result_tb);
     endtask
 
     // Watchdog: fail if the test sequence does not finish within 10,000 ns.
@@ -148,7 +176,86 @@ module basic_primitives_tb;
         #1;
         check_latch_tb(1'b0);
 
-        $display("PASS: mux2 (64 patterns), mux4 (4096 patterns), latch startup/transparency/hold");
+        // Inactive controls do not initialize an unwritten, disabled latch.
+        controlled_latch_data_tb = 1'b0;
+        controlled_latch_enable_tb = 1'b0;
+        controlled_latch_reset_n_tb = 1'b1;
+        controlled_latch_set_n_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'bx, 1'bx);
+
+        // Assert asynchronously while disabled, then check priority over X/Z.
+        controlled_latch_reset_n_tb = 1'b0;
+        controlled_latch_set_n_tb = 1'b0;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b1);
+        for (int pattern_var_tb = 0; pattern_var_tb < 16; pattern_var_tb++) begin
+            controlled_latch_data_tb = four_state_tb(pattern_var_tb % 4);
+            controlled_latch_enable_tb = four_state_tb(pattern_var_tb / 4);
+            #1;
+            check_controlled_latches_tb(1'b0, 1'b1);
+        end
+
+        // Release while disabled retains the forced values despite data changes.
+        controlled_latch_enable_tb = 1'b0;
+        controlled_latch_data_tb = 1'b1;
+        #1;
+        controlled_latch_reset_n_tb = 1'b1;
+        controlled_latch_set_n_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b1);
+        controlled_latch_data_tb = 1'b0;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b1);
+
+        // Transparent latches propagate all four states and recover on known data.
+        controlled_latch_enable_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b0);
+        for (int pattern_var_tb = 0; pattern_var_tb < 4; pattern_var_tb++) begin
+            controlled_latch_data_tb = four_state_tb(pattern_var_tb);
+            #1;
+            check_controlled_latches_tb(four_state_tb(pattern_var_tb), four_state_tb(pattern_var_tb));
+        end
+        controlled_latch_data_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'b1, 1'b1);
+
+        // Both binary stored values survive all four-state input changes.
+        for (int stored_var_tb = 0; stored_var_tb < 2; stored_var_tb++) begin
+            controlled_latch_enable_tb = 1'b1;
+            controlled_latch_data_tb = four_state_tb(stored_var_tb);
+            #1;
+            check_controlled_latches_tb(four_state_tb(stored_var_tb), four_state_tb(stored_var_tb));
+            controlled_latch_enable_tb = 1'b0;
+            #1;
+            for (int pattern_var_tb = 0; pattern_var_tb < 4; pattern_var_tb++) begin
+                controlled_latch_data_tb = four_state_tb(pattern_var_tb);
+                #1;
+                check_controlled_latches_tb(four_state_tb(stored_var_tb), four_state_tb(stored_var_tb));
+            end
+        end
+
+        // Controls override transparent data; each release resumes transparency.
+        controlled_latch_enable_tb = 1'b1;
+        controlled_latch_data_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'b1, 1'b1);
+        controlled_latch_reset_n_tb = 1'b0;
+        controlled_latch_set_n_tb = 1'b0;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b1);
+        controlled_latch_reset_n_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'b1, 1'b1);
+        controlled_latch_data_tb = 1'b0;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b1);
+        controlled_latch_set_n_tb = 1'b1;
+        #1;
+        check_controlled_latches_tb(1'b0, 1'b0);
+
+        $display("PASS: mux2 (64 patterns), mux4 (4096 patterns), latch startup/transparency/hold, reset/set latches");
         $finish;
     end
 endmodule

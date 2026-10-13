@@ -8,10 +8,9 @@ Install Git, Verilator, and Icarus Verilog using the [environment setup guide](.
 
 | Testbench | Status | Hardware and checks |
 |---|---|---|
-| `basic_primitives_tb.sv` | Runnable | `mux2`, `mux4`, and plain `latch` from `rtl/basic_primitives.sv`. |
-| `controlled_latches_tb.sv` | Runnable | `latch_reset` and `latch_set` from the same RTL file. |
+| `basic_primitives_tb.sv` | Runnable | All five primitives (`mux2`, `mux4`, `latch`, `latch_reset`, and `latch_set`) from `rtl/basic_primitives.sv`. |
 
-These two benches are the complete runnable hardware regression. Use explicit source lists rather than compiling files through a wildcard.
+The single basic-primitives bench is the complete runnable hardware regression. Use explicit source lists rather than compiling files through a wildcard.
 
 ## Run the verification workflow
 
@@ -19,7 +18,7 @@ These two benches are the complete runnable hardware regression. Use explicit so
 sh test/run_checks.sh
 ```
 
-The default `all` mode checks required tools, lints every RTL primitive with Verilator, then separately compiles and runs both Icarus testbenches. It stops with a nonzero status on missing tools, lint warnings/errors, compilation failure, or test failure. A failed compile never runs an older simulator artifact. The script resolves the repository root from its own location; the examples assume you start at that root.
+The default `all` mode checks required tools, lints every RTL primitive with Verilator, then compiles and runs the single Icarus testbench. It stops with a nonzero status on missing tools, lint warnings/errors, compilation failure, or test failure. A failed compile never runs an older simulator artifact. The script resolves the repository root from its own location; the examples assume you start at that root.
 
 Run stages separately when useful:
 
@@ -53,19 +52,10 @@ iverilog -g2012 -Wall -s basic_primitives_tb -o build/basic_primitives.vvp \
 vvp build/basic_primitives.vvp
 ```
 
-For the reset/set latch bench:
-
-```sh
-mkdir -p build
-iverilog -g2012 -Wall -s controlled_latches_tb -o build/controlled_latches.vvp \
-    rtl/basic_primitives.sv \
-    test/controlled_latches_tb.sv &&
-vvp build/controlled_latches.vvp
-```
 
 - `-g2012` selects SystemVerilog 2012 language support.
 - `-Wall` enables compiler warnings; review them even if compilation succeeds.
-- `-s` explicitly selects `basic_primitives_tb` or `controlled_latches_tb` as the simulation top.
+- `-s basic_primitives_tb` explicitly selects the simulation top.
 - `-o` names the compiled simulator artifact; `vvp` executes it.
 - `&&` runs simulation only after successful compilation, avoiding execution of an old artifact after a compile error.
 
@@ -84,11 +74,10 @@ The mux reference enumerates compatible binary select addresses and merges candi
 
 ## Results and troubleshooting
 
-A successful combined run prints `PASS: RTL lint (5 primitives)` followed by both simulation results:
+A successful combined run prints `PASS: RTL lint (5 primitives)` followed by the combined simulation result:
 
 ```text
-PASS: mux2 (64 patterns), mux4 (4096 patterns), latch startup/transparency/hold
-PASS: reset/set latches (startup, priority, transparency, hold, release)
+PASS: mux2 (64 patterns), mux4 (4096 patterns), latch startup/transparency/hold, reset/set latches
 ```
 
 Successful simulation exits with status zero; Icarus may also print a normal `$finish` message. A mismatch calls `$fatal`, identifies the failing primitive/pattern or expected and actual latch values, and exits unsuccessfully. A 10,000 ns simulated-time watchdog also calls `$fatal` if the test does not finish. It is not a wall-clock timeout.
