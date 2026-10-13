@@ -9,15 +9,12 @@ trama-efpga is an embedded FPGA project in its initial development stage. The fi
 trama-efpga/
 ├── README.md
 ├── rtl/
-│   └── primitives/
-│       └── behavioral/
-│           └── basic_primitives.sv
-├── tb/
+│   └── basic_primitives.sv
+├── test/
+│   ├── basic_primitives_tb.sv
+│   ├── controlled_latches_tb.sv
 │   ├── run_checks.sh
-│   ├── test_guide.md
-│   └── primitives/
-│       ├── basic_primitives_tb.sv
-│       └── controlled_latches_tb.sv
+│   └── test_guide.md
 ├── tools/
 │   └── README.md
 └── docs/
@@ -28,8 +25,8 @@ trama-efpga/
         └── sky130_hd_flip_flops.md
 ```
 
-- `rtl/primitives/behavioral/` holds the initial synthesizable behavioral implementations of the primitives.
-- `tb/primitives/` holds hardware testbenches for the primitives.
+- `rtl/` holds the initial synthesizable behavioral implementations of the primitives.
+- `test/` holds hardware testbenches for the primitives.
 - `tools/` is reserved for supporting software tools and their tests.
 - `docs/` is reserved for architecture notes and design documentation.
 
@@ -54,12 +51,12 @@ The muxes use conditional-operator four-state merging. Latch enables and inactiv
 ## Development guides
 
 - [Environment setup](docs/environment_setup.md): install the required tools on Windows (WSL2), Linux, or macOS and obtain a checkout.
-- [Hardware test guide](tb/test_guide.md): run Verilator lint and Icarus tests, understand coverage, and interpret results.
+- [Hardware test guide](test/test_guide.md): run Verilator lint and Icarus tests, understand coverage, and interpret results.
 
 Run both stages from the repository root:
 
 ```sh
-sh tb/run_checks.sh
+sh test/run_checks.sh
 ```
 
 Current verification uses Verilator for RTL lint and Icarus Verilog for four-state behavioral simulation. The basic-primitives and controlled-latches benches form the current runnable regression. Synthesis and CI workflows are still pending.

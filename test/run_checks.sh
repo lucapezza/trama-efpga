@@ -7,13 +7,13 @@
 set -eu
 
 if [ "$#" -gt 1 ]; then
-    echo "Usage: sh tb/run_checks.sh [all|lint|test]" >&2
+    echo "Usage: sh test/run_checks.sh [all|lint|test]" >&2
     exit 2
 fi
 mode=${1:-all}
 case "$mode" in
     all|lint|test) ;;
-    *) echo "Usage: sh tb/run_checks.sh [all|lint|test]" >&2; exit 2 ;;
+    *) echo "Usage: sh test/run_checks.sh [all|lint|test]" >&2; exit 2 ;;
 esac
 
 repo_root=$(CDPATH= cd "$(dirname "$0")/.." && pwd)
@@ -38,7 +38,7 @@ if [ "$mode" = all ] || [ "$mode" = lint ]; then
         # DECLFILENAME is intentional for this shared implementation file only.
         verilator --lint-only --language 1800-2012 -Wall -Wno-DECLFILENAME \
             --Mdir build/verilator_lint --top-module "$primitive" \
-            rtl/primitives/behavioral/basic_primitives.sv
+            rtl/basic_primitives.sv
         lint_count=$((lint_count + 1))
     done
     echo "PASS: RTL lint ($lint_count primitives)"
@@ -48,8 +48,8 @@ if [ "$mode" = all ] || [ "$mode" = test ]; then
     mkdir -p build
     for bench in basic_primitives controlled_latches; do
         iverilog -g2012 -Wall -s "${bench}_tb" -o "build/${bench}.vvp" \
-            rtl/primitives/behavioral/basic_primitives.sv \
-            "tb/primitives/${bench}_tb.sv"
+            rtl/basic_primitives.sv \
+            "test/${bench}_tb.sv"
         vvp "build/${bench}.vvp"
     done
 fi

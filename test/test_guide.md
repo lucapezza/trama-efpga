@@ -4,19 +4,19 @@
 
 Install Git, Verilator, and Icarus Verilog using the [environment setup guide](../docs/environment_setup.md). Run the commands below from the repository root in a Linux, Ubuntu WSL, or macOS shell. They use shell continuation syntax, not PowerShell syntax.
 
-`tb/` contains simulation-only verification code. Synthesizable hardware is under `rtl/`. Primitive testbenches are grouped in `tb/primitives/`; generated simulator files go in the Git-ignored `build/` directory.
+`test/` contains simulation-only verification code. Synthesizable hardware is under `rtl/`. Testbench files live directly in `test/`; generated simulator files go in the Git-ignored `build/` directory.
 
 | Testbench | Status | Hardware and checks |
 |---|---|---|
-| `primitives/basic_primitives_tb.sv` | Runnable | `mux2`, `mux4`, and plain `latch` from `rtl/primitives/behavioral/basic_primitives.sv`. |
-| `primitives/controlled_latches_tb.sv` | Runnable | `latch_reset` and `latch_set` from the same RTL file. |
+| `basic_primitives_tb.sv` | Runnable | `mux2`, `mux4`, and plain `latch` from `rtl/basic_primitives.sv`. |
+| `controlled_latches_tb.sv` | Runnable | `latch_reset` and `latch_set` from the same RTL file. |
 
 These two benches are the complete runnable hardware regression. Use explicit source lists rather than compiling files through a wildcard.
 
 ## Run the verification workflow
 
 ```sh
-sh tb/run_checks.sh
+sh test/run_checks.sh
 ```
 
 The default `all` mode checks required tools, lints every RTL primitive with Verilator, then separately compiles and runs both Icarus testbenches. It stops with a nonzero status on missing tools, lint warnings/errors, compilation failure, or test failure. A failed compile never runs an older simulator artifact. The script resolves the repository root from its own location; the examples assume you start at that root.
@@ -24,8 +24,8 @@ The default `all` mode checks required tools, lints every RTL primitive with Ver
 Run stages separately when useful:
 
 ```sh
-sh tb/run_checks.sh lint
-sh tb/run_checks.sh test
+sh test/run_checks.sh lint
+sh test/run_checks.sh test
 ```
 
 `lint` requires only Verilator; `test` requires only Icarus. Use `all` before submitting a change. Unsupported modes or extra arguments produce a usage error (status 2).
@@ -48,8 +48,8 @@ See [Verilator arguments](https://verilator.org/guide/latest/exe_verilator.html)
 ```sh
 mkdir -p build
 iverilog -g2012 -Wall -s basic_primitives_tb -o build/basic_primitives.vvp \
-    rtl/primitives/behavioral/basic_primitives.sv \
-    tb/primitives/basic_primitives_tb.sv &&
+    rtl/basic_primitives.sv \
+    test/basic_primitives_tb.sv &&
 vvp build/basic_primitives.vvp
 ```
 
@@ -58,8 +58,8 @@ For the reset/set latch bench:
 ```sh
 mkdir -p build
 iverilog -g2012 -Wall -s controlled_latches_tb -o build/controlled_latches.vvp \
-    rtl/primitives/behavioral/basic_primitives.sv \
-    tb/primitives/controlled_latches_tb.sv &&
+    rtl/basic_primitives.sv \
+    test/controlled_latches_tb.sv &&
 vvp build/controlled_latches.vvp
 ```
 

@@ -9,7 +9,7 @@ description: Apply SystemVerilog formatting, naming, and RTL conventions when cr
 
 Use four spaces for indentation and lowercase snake_case for filenames, modules, signals, and local variables. Match module names to filenames and name testbenches `<module>_tb.sv`.
 
-Keep synthesizable RTL separate from simulation-only testbench code. Prefer `logic`, `always_comb`, and `always_ff`; use `always_latch` for intentional latch storage. Use blocking assignments in combinational calculations and nonblocking assignments for stored state. Declare widths explicitly and explain non-obvious hardware assumptions.
+Place synthesizable RTL files directly in `rtl/` and simulation-only testbenches directly in `test/`. Keep these directories flat until concrete work requires additional structure. Prefer `logic`, `always_comb`, and `always_ff`; use `always_latch` for intentional latch storage. Use blocking assignments in combinational calculations and nonblocking assignments for stored state. Declare widths explicitly and explain non-obvious hardware assumptions.
 
 ## Signal suffixes
 

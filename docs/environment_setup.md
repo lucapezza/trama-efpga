@@ -68,10 +68,10 @@ verilator --version
 
 If you already have a checkout, enter that directory instead of cloning again. If a command is not found, check that installation completed and that you are using the intended terminal and PATH.
 
-Next, follow the [test guide](../tb/test_guide.md). Run its commands from the repository root. Simulation outputs belong in `build/`, which is ignored by Git. Temporary extracted packages used for local checks are not persistent installations; use the installation steps above for normal development.
+Next, follow the [test guide](../test/test_guide.md). Run its commands from the repository root. Simulation outputs belong in `build/`, which is ignored by Git. Temporary extracted packages used for local checks are not persistent installations; use the installation steps above for normal development.
 
 ## Optional tools and current limits
 
-[GTKWave](https://gtkwave.github.io/gtkwave/) can inspect waveforms, but the current testbench does not emit waveform files. Installing a viewer alone does not enable tracing. Verilator lint is part of `sh tb/run_checks.sh`; synthesis and CI workflows are not configured yet. Only `--lint-only` is used, so this workflow does not require compiling a C++ simulation model.
+[GTKWave](https://gtkwave.github.io/gtkwave/) can inspect waveforms, but the current testbench does not emit waveform files. Installing a viewer alone does not enable tracing. Verilator lint is part of `sh test/run_checks.sh`; synthesis and CI workflows are not configured yet. Only `--lint-only` is used, so this workflow does not require compiling a C++ simulation model.
 
 The lint and simulation workflow has been exercised with Verilator 5.020 and Icarus 12.0 under Ubuntu WSL. Linux and macOS installation instructions follow their package-manager workflows; those host environments have not been tested in this repository.
