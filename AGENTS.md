@@ -22,6 +22,7 @@ Use `git diff --check` to check tracked changes for whitespace errors and `git s
 
 - For hand-written SystemVerilog, use [systemverilog-style](.agents/skills/systemverilog-style/SKILL.md).
 - For headers and end-of-file comments in hand-written code of any language, use [code-file-comments](.agents/skills/code-file-comments/SKILL.md).
+- For editable SVG hardware block diagrams, use [svg-block-diagrams](.agents/skills/svg-block-diagrams/SKILL.md).
 
 ## Testing Guidelines
 
