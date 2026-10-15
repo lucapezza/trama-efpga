@@ -11,6 +11,8 @@ Use four spaces for indentation and lowercase snake_case for filenames, modules,
 
 Place synthesizable RTL files directly in `rtl/` and simulation-only testbenches directly in `test/`. Keep these directories flat until concrete work requires additional structure. Prefer `logic`, `always_comb`, and `always_ff`; use `always_latch` for intentional latch storage. Use blocking assignments in combinational calculations and nonblocking assignments for stored state. Declare widths explicitly and explain non-obvious hardware assumptions.
 
+In module port declarations, always list clock inputs first, followed by reset inputs, then all remaining ports. This ordering applies regardless of clock edge or reset polarity; modules without clocks begin with their reset inputs.
+
 ## Signal suffixes
 
 | Suffix | Meaning | Example |
@@ -22,11 +24,13 @@ Place synthesizable RTL files directly in `rtl/` and simulation-only testbenches
 | `_reg` | Flip-flop state | `count_reg` |
 | `_regnext` | Explicit next-state value for a flip-flop | `count_regnext` |
 | `_latch` | Latch state | `config_latch` |
-| `_var` | Local calculation or loop temporary | `index_var` |
+| `_var` | Local calculation or procedural loop temporary | `index_var` |
+| `_genvar` | Generate-loop elaboration index | `bit_index_genvar` |
 
 - Put polarity before direction or role: `reset_n_in`, `ready_n_out`, `flag_n_reg`.
 - Introduce `_regnext` only when a separate next-state signal is useful.
-- Reserve `_var` for local calculations and loop temporaries, not every `logic` declaration.
+- Reserve `_var` for local calculations and procedural loop temporaries, not every `logic` declaration.
+- Use `_genvar` for every `genvar` elaboration index; do not use `_var` for generate-loop indices.
 - Name ports by direction even when backed by storage: `data_out`, with internal `data_reg` or `data_latch` when useful. Do not combine direction and storage suffixes.
 - Reserve `_reg` for flip-flop state and `_latch` for latch state; declaration type does not determine the suffix.
 - Give ordinary internal combinational signals descriptive names without a generic role suffix, such as `selected_data`.
@@ -34,7 +38,7 @@ Place synthesizable RTL files directly in `rtl/` and simulation-only testbenches
 
 ## Testbench identifiers
 
-Append `_tb` to testbench-owned signals, variables, constants, function/task names, and their arguments. Preserve existing role and polarity suffixes before it: `mux2_data_tb`, `pattern_var_tb`, `expected_in_tb`, `reset_n_tb`, and `flag_n_reg_tb`.
+Append `_tb` to testbench-owned signals, variables, constants, function/task names, and their arguments. Preserve existing role and polarity suffixes before it: `mux2_data_tb`, `pattern_var_tb`, `expected_in_tb`, `reset_n_tb`, `flag_n_reg_tb`, and `bit_index_genvar_tb`.
 
 Keep DUT module names, DUT port names, and DUT instance names unchanged; DUT instances retain `_dut`. A connection such as `.data_in(latch_data_tb)` renames only the testbench signal. Testbench module names and filenames already end in `_tb`; do not append it twice. Apply the suffix to helper return-value assignments as well as declarations and calls.
 

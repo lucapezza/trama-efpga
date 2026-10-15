@@ -22,6 +22,8 @@ Default output to `docs/diagrams/<system_name>.svg`, using the system's lowercas
 ## Layout and connections
 
 - Prefer left-to-right data flow. Align related blocks and matching ports where practical, with consistent spacing and enough room for labels. Prefer horizontal and vertical wire segments; route feedback around blocks.
+- Align related wires, bends, and endpoints vertically or horizontally whenever possible. Space parallel wires and repeated routes equally where practical, while keeping connectivity clear and labels unobstructed.
+- Keep at least 20 px of edge-to-edge clearance in SVG viewBox units between unrelated parallel wire segments and nearby bends or endpoints. Enlarge or reroute the layout when needed; intentional connections, crossings, and symbol pin geometry are exempt.
 - Use small arrowheads near receiving ports to indicate signal direction. Keep arrowheads clear of clock triangles and polarity bubbles. For bidirectional signals, show arrows in both directions.
 - Default single-bit wire strokes to 1.5 px and multibit wire strokes to 3 px. Label buses with their width or range, retaining symbolic widths for parameterized systems. Do not silently classify an unknown width as single-bit.
 - Mark connected branches with filled junction dots. Draw unconnected wire crossings without dots; avoid ambiguous crossings at bends or endpoints. Keep bus taps and bit selections explicit.

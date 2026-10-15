@@ -12,6 +12,15 @@ trama-efpga is an embedded FPGA project in early development. Behavioral mux2, m
 
 Keep the structure small; introduce new directories when concrete work needs them.
 
+## Trama Configuration Port Convention
+
+Configuration inputs of blocks must be the final ports in module declarations,
+after all other inputs and outputs, and must be named `<name>_config_<suffix>`
+(for example, `lut_config_in` and `ff_select_config_in`). Clock and reset inputs
+remain first. Configuration-memory programming data and enable ports form the
+programming interface; use `program_data_in` and `program_enable_in` for them.
+This convention is specific to trama-efpga and does not modify the contributor skills.
+
 ## Build, Test, and Development Commands
 
 Run `sh test/run_checks.sh` for Verilator RTL lint followed by Icarus simulation (`iverilog` and `vvp`); see [environment setup](docs/environment_setup.md) for prerequisites and the [test guide](test/test_guide.md) for exact commands. Separate stages are `sh test/run_checks.sh lint` and `sh test/run_checks.sh test`. No formatter, synthesis flow, or CI has been configured.
