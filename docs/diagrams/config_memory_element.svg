@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 1150">
+<title>Configuration memory latch mesh</title>
+<desc>Implemented row-major config_memory_element connectivity: 10 plain latches, four programming columns, three active-high enable rows. Named q bit endpoints connect individually to the output vector; they are not shorted together. Bottom view shows two instances sharing parent input buses. Logical connectivity only, not physical placement.</desc>
+<defs><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="black"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:black}.signal{font-style:italic}.wire{fill:none;stroke:black;stroke-width:1.5}.bus{fill:none;stroke:black;stroke-width:3}.block{fill:white;stroke:black;stroke-width:1.5}.guide{fill:none;stroke:#888;stroke-width:1;stroke-dasharray:5 5}.dot{fill:black}</style>
+
+<text x="30" y="30" class="" text-anchor="start">config_memory_element - plain latch configuration mesh</text>
+<text x="30" y="55" class="" text-anchor="start">Example: NUM_BITS = 10, NUM_COLUMNS = 4, NUM_ROWS = 3</text>
+<text x="30" y="80" class="" text-anchor="start">Bit i: column = i % NUM_COLUMNS; row = i / NUM_COLUMNS (integer division)</text>
+<text x="215" y="120" class="signal" text-anchor="middle">program_data_in[0]</text>
+<path d="M215 130 V650" class="wire"/>
+<text x="445" y="120" class="signal" text-anchor="middle">program_data_in[1]</text>
+<path d="M445 130 V650" class="wire"/>
+<text x="675" y="120" class="signal" text-anchor="middle">program_data_in[2]</text>
+<path d="M675 130 V650" class="wire"/>
+<text x="905" y="120" class="signal" text-anchor="middle">program_data_in[3]</text>
+<path d="M905 130 V650" class="wire"/>
+<text x="30" y="300" class="signal" text-anchor="start">program_enable_in[0]</text>
+<path d="M30 315 H1080" class="wire"/>
+<rect x="250" y="205" width="100" height="80" class="block"/>
+<text x="300" y="243" class="" text-anchor="middle">latch</text>
+<text x="300" y="263" class="" text-anchor="middle">bit 0</text>
+<text x="308" y="221" class="" text-anchor="start">D</text>
+<text x="257" y="260" class="" text-anchor="start">EN</text>
+<text x="334" y="237" class="" text-anchor="start">Q</text>
+<path d="M215 185 H300 V205" class="wire" marker-end="url(#arrow)"/>
+<circle cx="215" cy="185" r="3" class="dot"/>
+<path d="M240 315 V255 H250" class="wire" marker-end="url(#arrow)"/>
+<circle cx="240" cy="315" r="3" class="dot"/>
+<path d="M350 232 H400" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="221" class="signal" text-anchor="start">q[0]</text>
+<rect x="480" y="205" width="100" height="80" class="block"/>
+<text x="530" y="243" class="" text-anchor="middle">latch</text>
+<text x="530" y="263" class="" text-anchor="middle">bit 1</text>
+<text x="538" y="221" class="" text-anchor="start">D</text>
+<text x="487" y="260" class="" text-anchor="start">EN</text>
+<text x="564" y="237" class="" text-anchor="start">Q</text>
+<path d="M445 185 H530 V205" class="wire" marker-end="url(#arrow)"/>
+<circle cx="445" cy="185" r="3" class="dot"/>
+<path d="M470 315 V255 H480" class="wire" marker-end="url(#arrow)"/>
+<circle cx="470" cy="315" r="3" class="dot"/>
+<path d="M580 232 H630" class="wire" marker-end="url(#arrow)"/>
+<text x="590" y="221" class="signal" text-anchor="start">q[1]</text>
+<rect x="710" y="205" width="100" height="80" class="block"/>
+<text x="760" y="243" class="" text-anchor="middle">latch</text>
+<text x="760" y="263" class="" text-anchor="middle">bit 2</text>
+<text x="768" y="221" class="" text-anchor="start">D</text>
+<text x="717" y="260" class="" text-anchor="start">EN</text>
+<text x="794" y="237" class="" text-anchor="start">Q</text>
+<path d="M675 185 H760 V205" class="wire" marker-end="url(#arrow)"/>
+<circle cx="675" cy="185" r="3" class="dot"/>
+<path d="M700 315 V255 H710" class="wire" marker-end="url(#arrow)"/>
+<circle cx="700" cy="315" r="3" class="dot"/>
+<path d="M810 232 H860" class="wire" marker-end="url(#arrow)"/>
+<text x="820" y="221" class="signal" text-anchor="start">q[2]</text>
+<rect x="940" y="205" width="100" height="80" class="block"/>
+<text x="990" y="243" class="" text-anchor="middle">latch</text>
+<text x="990" y="263" class="" text-anchor="middle">bit 3</text>
+<text x="998" y="221" class="" text-anchor="start">D</text>
+<text x="947" y="260" class="" text-anchor="start">EN</text>
+<text x="1024" y="237" class="" text-anchor="start">Q</text>
+<path d="M905 185 H990 V205" class="wire" marker-end="url(#arrow)"/>
+<circle cx="905" cy="185" r="3" class="dot"/>
+<path d="M930 315 V255 H940" class="wire" marker-end="url(#arrow)"/>
+<circle cx="930" cy="315" r="3" class="dot"/>
+<path d="M1040 232 H1090" class="wire" marker-end="url(#arrow)"/>
+<text x="1050" y="221" class="signal" text-anchor="start">q[3]</text>
+<text x="30" y="470" class="signal" text-anchor="start">program_enable_in[1]</text>
+<path d="M30 485 H1080" class="wire"/>
+<rect x="250" y="375" width="100" height="80" class="block"/>
+<text x="300" y="413" class="" text-anchor="middle">latch</text>
+<text x="300" y="433" class="" text-anchor="middle">bit 4</text>
+<text x="308" y="391" class="" text-anchor="start">D</text>
+<text x="257" y="430" class="" text-anchor="start">EN</text>
+<text x="334" y="407" class="" text-anchor="start">Q</text>
+<path d="M215 355 H300 V375" class="wire" marker-end="url(#arrow)"/>
+<circle cx="215" cy="355" r="3" class="dot"/>
+<path d="M240 485 V425 H250" class="wire" marker-end="url(#arrow)"/>
+<circle cx="240" cy="485" r="3" class="dot"/>
+<path d="M350 402 H400" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="391" class="signal" text-anchor="start">q[4]</text>
+<rect x="480" y="375" width="100" height="80" class="block"/>
+<text x="530" y="413" class="" text-anchor="middle">latch</text>
+<text x="530" y="433" class="" text-anchor="middle">bit 5</text>
+<text x="538" y="391" class="" text-anchor="start">D</text>
+<text x="487" y="430" class="" text-anchor="start">EN</text>
+<text x="564" y="407" class="" text-anchor="start">Q</text>
+<path d="M445 355 H530 V375" class="wire" marker-end="url(#arrow)"/>
+<circle cx="445" cy="355" r="3" class="dot"/>
+<path d="M470 485 V425 H480" class="wire" marker-end="url(#arrow)"/>
+<circle cx="470" cy="485" r="3" class="dot"/>
+<path d="M580 402 H630" class="wire" marker-end="url(#arrow)"/>
+<text x="590" y="391" class="signal" text-anchor="start">q[5]</text>
+<rect x="710" y="375" width="100" height="80" class="block"/>
+<text x="760" y="413" class="" text-anchor="middle">latch</text>
+<text x="760" y="433" class="" text-anchor="middle">bit 6</text>
+<text x="768" y="391" class="" text-anchor="start">D</text>
+<text x="717" y="430" class="" text-anchor="start">EN</text>
+<text x="794" y="407" class="" text-anchor="start">Q</text>
+<path d="M675 355 H760 V375" class="wire" marker-end="url(#arrow)"/>
+<circle cx="675" cy="355" r="3" class="dot"/>
+<path d="M700 485 V425 H710" class="wire" marker-end="url(#arrow)"/>
+<circle cx="700" cy="485" r="3" class="dot"/>
+<path d="M810 402 H860" class="wire" marker-end="url(#arrow)"/>
+<text x="820" y="391" class="signal" text-anchor="start">q[6]</text>
+<rect x="940" y="375" width="100" height="80" class="block"/>
+<text x="990" y="413" class="" text-anchor="middle">latch</text>
+<text x="990" y="433" class="" text-anchor="middle">bit 7</text>
+<text x="998" y="391" class="" text-anchor="start">D</text>
+<text x="947" y="430" class="" text-anchor="start">EN</text>
+<text x="1024" y="407" class="" text-anchor="start">Q</text>
+<path d="M905 355 H990 V375" class="wire" marker-end="url(#arrow)"/>
+<circle cx="905" cy="355" r="3" class="dot"/>
+<path d="M930 485 V425 H940" class="wire" marker-end="url(#arrow)"/>
+<circle cx="930" cy="485" r="3" class="dot"/>
+<path d="M1040 402 H1090" class="wire" marker-end="url(#arrow)"/>
+<text x="1050" y="391" class="signal" text-anchor="start">q[7]</text>
+<text x="30" y="640" class="signal" text-anchor="start">program_enable_in[2]</text>
+<path d="M30 655 H1080" class="wire"/>
+<rect x="250" y="545" width="100" height="80" class="block"/>
+<text x="300" y="583" class="" text-anchor="middle">latch</text>
+<text x="300" y="603" class="" text-anchor="middle">bit 8</text>
+<text x="308" y="561" class="" text-anchor="start">D</text>
+<text x="257" y="600" class="" text-anchor="start">EN</text>
+<text x="334" y="577" class="" text-anchor="start">Q</text>
+<path d="M215 525 H300 V545" class="wire" marker-end="url(#arrow)"/>
+<circle cx="215" cy="525" r="3" class="dot"/>
+<path d="M240 655 V595 H250" class="wire" marker-end="url(#arrow)"/>
+<circle cx="240" cy="655" r="3" class="dot"/>
+<path d="M350 572 H400" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="561" class="signal" text-anchor="start">q[8]</text>
+<rect x="480" y="545" width="100" height="80" class="block"/>
+<text x="530" y="583" class="" text-anchor="middle">latch</text>
+<text x="530" y="603" class="" text-anchor="middle">bit 9</text>
+<text x="538" y="561" class="" text-anchor="start">D</text>
+<text x="487" y="600" class="" text-anchor="start">EN</text>
+<text x="564" y="577" class="" text-anchor="start">Q</text>
+<path d="M445 525 H530 V545" class="wire" marker-end="url(#arrow)"/>
+<circle cx="445" cy="525" r="3" class="dot"/>
+<path d="M470 655 V595 H480" class="wire" marker-end="url(#arrow)"/>
+<circle cx="470" cy="655" r="3" class="dot"/>
+<path d="M580 572 H630" class="wire" marker-end="url(#arrow)"/>
+<text x="590" y="561" class="signal" text-anchor="start">q[9]</text>
+<rect x="710" y="545" width="100" height="80" class="guide"/>
+<text x="760" y="590" class="" text-anchor="middle">unpopulated</text>
+<rect x="940" y="545" width="100" height="80" class="guide"/>
+<text x="990" y="590" class="" text-anchor="middle">unpopulated</text>
+<text x="30" y="700" class="" text-anchor="start">D follows column data while EN is high; EN low holds the previous value. No clock, set, reset, or initial value.</text>
+<text x="30" y="725" class="" text-anchor="start">Named output connections: each q[i] connects only to config_out[i]. Unpopulated positions have no output.</text>
+<path d="M300 755 H650" class="bus" marker-end="url(#arrow)"/>
+<text x="300" y="746" class="signal" text-anchor="start">q[9:0]</text>
+<text x="665" y="760" class="signal" text-anchor="start">config_out[9:0]</text>
+<text x="30" y="810" class="" text-anchor="start">Composition: parent broadcasts programming columns and row enables to both tiles</text>
+<path d="M30 855 H1080" class="bus"/>
+<text x="30" y="845" class="signal" text-anchor="start">program_data_in[NUM_COLUMNS-1:0] (shared)</text>
+<path d="M30 900 H1080" class="bus"/>
+<text x="30" y="890" class="signal" text-anchor="start">program_enable_in[NUM_ROWS-1:0]</text>
+<rect x="245" y="950" width="290" height="85" class="block"/>
+<text x="390" y="995" class="" text-anchor="middle">Tile A / config_memory_element</text>
+<path d="M315 855 V950" class="bus" marker-end="url(#arrow)"/>
+<circle cx="315" cy="855" r="3" class="dot"/>
+<path d="M465 900 V950" class="bus" marker-end="url(#arrow)"/>
+<circle cx="465" cy="900" r="3" class="dot"/>
+<path d="M390 1035 V1065" class="bus" marker-end="url(#arrow)"/>
+<text x="390" y="1085" class="signal" text-anchor="middle">config_out[NUM_BITS-1:0]</text>
+<rect x="705" y="950" width="290" height="85" class="block"/>
+<text x="850" y="995" class="" text-anchor="middle">Tile B / config_memory_element</text>
+<path d="M775 855 V950" class="bus" marker-end="url(#arrow)"/>
+<circle cx="775" cy="855" r="3" class="dot"/>
+<path d="M925 900 V950" class="bus" marker-end="url(#arrow)"/>
+<circle cx="925" cy="900" r="3" class="dot"/>
+<path d="M850 1035 V1065" class="bus" marker-end="url(#arrow)"/>
+<text x="850" y="1085" class="signal" text-anchor="middle">config_out[NUM_BITS-1:0]</text>
+<text x="30" y="1125" class="" text-anchor="start">All connected tiles with an enabled row capture the shared column data; outputs stay separate.</text>
+</svg>

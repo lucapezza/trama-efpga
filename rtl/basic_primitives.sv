@@ -1,10 +1,10 @@
 // File: basic_primitives.sv
 // Project: trama-efpga
 // Author: luke
-// Description: Behavioral single-bit mux and latch primitives.
+// Description: Behavioral single-bit mux, latch, and flip-flop primitives.
 // Assumptions: Enables are active-high; reset/set controls are asynchronous
 // and active-low. Storage starts unknown until written or explicitly reset/set.
-// Enables and inactive reset/set controls must be known during normal operation.
+// Enables, clocks, and reset/set controls must be known during normal operation.
 
 // Compile one implementation of these modules per build. Future standard-cell
 // wrappers must preserve these names, ports, and binary functional behavior.
@@ -59,9 +59,9 @@ module latch (
 endmodule
 
 module latch_reset (
+    input  logic reset_n_in,
     input  logic data_in,
     input  logic enable_in,
-    input  logic reset_n_in,
     output logic data_out
 );
     timeunit 1ns;
@@ -98,6 +98,25 @@ module latch_set (
             data_out <= data_in;
     end
     /* verilator lint_on COMBDLY */
+endmodule
+
+module ff (
+    input  logic clk_in,
+    input  logic reset_n_in,
+    input  logic data_in,
+    output logic data_out
+);
+    timeunit 1ns;
+    timeprecision 1ps;
+
+    // Active-low asynchronous reset overrides rising-edge data capture.
+    // No initialization: reset or a rising clock edge must establish state.
+    always_ff @(posedge clk_in or negedge reset_n_in) begin
+        if (!reset_n_in)
+            data_out <= 1'b0;
+        else
+            data_out <= data_in;
+    end
 endmodule
 
 // End of file

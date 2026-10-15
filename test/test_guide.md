@@ -8,9 +8,13 @@ Install Git, Verilator, and Icarus Verilog using the [environment setup guide](.
 
 | Testbench | Status | Hardware and checks |
 |---|---|---|
-| `basic_primitives_tb.sv` | Runnable | All five primitives (`mux2`, `mux4`, `latch`, `latch_reset`, and `latch_set`) from `rtl/basic_primitives.sv`. |
+| `basic_primitives_tb.sv` | Runnable | Original five primitives (`mux2`, `mux4`, `latch`, `latch_reset`, and `latch_set`) from `rtl/basic_primitives.sv`. |
+| `ff_tb.sv` | Runnable | Rising-edge FF capture, retention, asynchronous reset, and X/Z data. |
+| `logic_element_tb.sv` | Runnable | LUT mapping and four-state addresses; independent and combined FF paths. |
+| `config_memory_element_tb.sv` | Runnable | Six mesh shapes; mapping, transparency, retention, simultaneous rows, and X/Z data. |
+| `config_memory_element_invalid_tb.sv` | Expected failures | Eight invalid parameter cases; runner checks exit status and intended diagnostic. |
 
-The single basic-primitives bench is the complete runnable hardware regression. Use explicit source lists rather than compiling files through a wildcard.
+The basic-primitives, FF, logic-element, and configuration-memory benches form the complete runnable hardware regression. Use explicit source lists rather than compiling files through a wildcard.
 
 ## Run the verification workflow
 
@@ -18,7 +22,7 @@ The single basic-primitives bench is the complete runnable hardware regression. 
 sh test/run_checks.sh
 ```
 
-The default `all` mode checks required tools, lints every RTL primitive with Verilator, then compiles and runs the single Icarus testbench. It stops with a nonzero status on missing tools, lint warnings/errors, compilation failure, or test failure. A failed compile never runs an older simulator artifact. The script resolves the repository root from its own location; the examples assume you start at that root.
+The default `all` mode checks required tools, lints every RTL module with Verilator, then compiles and runs all Icarus benches. It stops with a nonzero status on missing tools, lint warnings/errors, compilation failure, or test failure. A failed compile never runs an older simulator artifact. The script resolves the repository root from its own location; the examples assume you start at that root.
 
 Run stages separately when useful:
 
@@ -31,11 +35,11 @@ sh test/run_checks.sh test
 
 ## RTL lint policy
 
-The runner invokes Verilator with `--lint-only --language 1800-2012 -Wall` for each of `mux2`, `mux4`, `latch`, `latch_reset`, and `latch_set` as an explicit top. This checks all current RTL primitives, including those not instantiated by a future testbench. The testbench itself is compiled and executed with Icarus; it is not included in this RTL lint pass.
+The runner invokes Verilator with `--lint-only --language 1800-2012 -Wall` for each of `mux2`, `mux4`, `latch`, `latch_reset`, `latch_set`, and `ff` as an explicit top. It also lints `config_memory_element` as an explicit top with `-GNUM_BITS=10 -GNUM_COLUMNS=4 -GNUM_ROWS=3` and sources `rtl/basic_primitives.sv rtl/config_memory_element.sv`. This checks a populated mesh with a partial final row. It also lints `logic_element` as an explicit top with sources `rtl/basic_primitives.sv rtl/logic_element.sv`. Testbench code is compiled and executed with Icarus; it is not included in this RTL lint pass.
 
 Warnings remain fatal. Two intentional exceptions apply:
 
-- `DECLFILENAME` is disabled only for the invocation on `basic_primitives.sv`, because this replaceable implementation file intentionally groups several modules.
+- `DECLFILENAME` is disabled for lint invocations that include `basic_primitives.sv`, because this replaceable implementation file intentionally groups several modules.
 - `COMBDLY` is waived locally around the three `always_latch` blocks. Their nonblocking assignments represent stored state and preserve the intended Icarus scheduling. Verilator flags these assignments and may model them differently in simulation; this workflow uses Verilator only for static lint.
 
 Do not disable all warnings, add `-Wno-fatal`, or extend waivers without a concrete explanation. New modules must be added to the runner's explicit lint-top list and any needed source lists. Output paths stay under the ignored `build/` directory.
@@ -72,12 +76,104 @@ Recompile after changing RTL or testbench code. Keep explicit source lists and s
 
 The mux reference enumerates compatible binary select addresses and merges candidate data by consensus. Comparisons use case inequality (`!==`) so X/Z differences are detected. The plain latch has no reset. All latch enables and inactive reset/set controls are assumed known during normal operation. Unknown-enable behavior with inactive controls and unknown reset/set controls are not covered; asserted reset/set is tested even with X/Z enables. Transparent capture of Z is covered for the reset/set variants, but not for the plain latch. This is functional behavioral verification, not timing, metastability, or transistor-level verification. No aggregate coverage threshold is configured.
 
+## Flip-flop and logic element tests
+
+The `ff_tb` top uses `rtl/basic_primitives.sv test/ff_tb.sv` as its complete
+source list. It checks unknown startup, capture of zero and one on rising
+edges, retention on falling edges and between edges, asynchronous reset with
+clock low and high, reset priority during rising edges (including simultaneous
+assertion), reset release without capture, X/Z data capture, and reset recovery.
+
+The `logic_element_tb` top uses
+`rtl/basic_primitives.sv rtl/logic_element.sv test/logic_element_tb.sv` as its
+complete source list. It checks all 16 addresses against each of 16 walking-one
+configuration tables, live configuration updates, and all 256 four-state
+addresses for five tables: constant zero, constant one, four-input XOR, AND,
+and OR (1,280 address/table combinations). Its independent reference enumerates
+compatible binary addresses and merges results by consensus.
+
+The block's configuration inputs are `lut_config_in` and `ff_select_config_in`,
+listed last in its module declaration. Sequential checks cover LUT-only operation while the FF is held in reset,
+LUT-to-FF capture, external-data FF operation independent of the LUT, retention
+between edges, and asynchronous reset without changing the LUT result. All 64
+combinations of four-state LUT result, external data, and FF mux selection are
+captured and checked, including unknown-selection consensus and disagreement.
+Both benches use case-inequality comparisons and 10,000 ns watchdogs.
+
+Run either bench directly:
+
+```sh
+mkdir -p build
+iverilog -g2012 -Wall -s ff_tb -o build/ff.vvp \
+    rtl/basic_primitives.sv test/ff_tb.sv &&
+vvp build/ff.vvp
+
+iverilog -g2012 -Wall -s logic_element_tb -o build/logic_element.vvp \
+    rtl/basic_primitives.sv rtl/logic_element.sv test/logic_element_tb.sv &&
+vvp build/logic_element.vvp
+```
+
+These benches assume binary clock and reset values. They do not check
+unknown-clock/reset semantics, physical timing, metastability, reset
+recovery/removal, or synthesis mapping. No new dependencies or warning waivers
+are required.
+
+## Configuration memory tests
+
+The functional top is `config_memory_element_tb`; its complete source list is
+`rtl/basic_primitives.sv rtl/config_memory_element.sv test/config_memory_element_tb.sv`.
+Run directly with:
+
+```sh
+mkdir -p build
+iverilog -g2012 -Wall -s config_memory_element_tb -o build/config_memory_element.vvp \
+    rtl/basic_primitives.sv rtl/config_memory_element.sv test/config_memory_element_tb.sv &&
+vvp build/config_memory_element.vvp
+```
+
+The six shapes are `(NUM_BITS, NUM_COLUMNS)` = `(1,1)`, `(4,4)`, `(4,1)`,
+`(12,4)`, `(10,4)`, and `(2,4)`. All exercise the default row calculation.
+Tests check unknown startup, walking column patterns and row-major output
+ordering, independently enabled rows, transparency without toggling enable,
+disabled retention, simultaneously enabled rows, transparent X/Z data,
+retention of X/Z, known-data recovery, and retention of known data against X/Z.
+A 10,000 ns watchdog detects incomplete functional tests.
+
+The expected-failure top is `config_memory_element_invalid_tb`; its complete
+source list is `rtl/basic_primitives.sv rtl/config_memory_element.sv test/config_memory_element_invalid_tb.sv`.
+For example, case 6 tests insufficient row capacity:
+
+```sh
+iverilog -g2012 -Wall -s config_memory_element_invalid_tb \
+    -Pconfig_memory_element_invalid_tb.CASE_TB=6 \
+    -o build/config_memory_element_invalid.vvp \
+    rtl/basic_primitives.sv rtl/config_memory_element.sv test/config_memory_element_invalid_tb.sv &&
+vvp build/config_memory_element_invalid.vvp
+```
+
+This simulation **must fail**, reporting
+`config_memory_element: NUM_ROWS must equal ceil(NUM_BITS / NUM_COLUMNS)`.
+Cases 0/1 select zero/negative bits, 2/3 zero/negative columns, 4/5 zero/negative
+rows, 6 insufficient rows, and 7 surplus rows. Cases 0–5 must report
+`config_memory_element: parameters must be positive`. Use the runner for all
+cases: it requires a nonzero simulation status and the correct diagnostic,
+rejecting unexpected success or an unrelated failure. Compile failures remain
+fatal. Parameter checks are simulation-only; synthesis requires valid dimensions.
+
+Enables must be binary. Tests are behavioral and do not verify unknown-enable
+semantics, timing, metastability, synthesis mapping, or physical placement.
+There is no coverage threshold.
+
 ## Results and troubleshooting
 
-A successful combined run prints `PASS: RTL lint (5 primitives)` followed by the combined simulation result:
+A successful combined run prints `PASS: RTL lint (6 primitives, config_memory_element, logic_element)` followed by the combined simulation result:
 
 ```text
 PASS: mux2 (64 patterns), mux4 (4096 patterns), latch startup/transparency/hold, reset/set latches
+PASS: ff (rising-edge capture, retention, async reset, X/Z)
+PASS: logic_element (LUT mapping, 1280 four-state addresses, independent/combined FF, 64 mux cases)
+PASS: config_memory_element (6 mesh shapes, mapping, transparency, hold, X/Z)
+PASS: config_memory_element (8 invalid parameter cases rejected)
 ```
 
 Successful simulation exits with status zero; Icarus may also print a normal `$finish` message. A mismatch calls `$fatal`, identifies the failing primitive/pattern or expected and actual latch values, and exits unsuccessfully. A 10,000 ns simulated-time watchdog also calls `$fatal` if the test does not finish. It is not a wall-clock timeout.

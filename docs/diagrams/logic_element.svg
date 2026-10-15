@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1450 1060">
+<title>logic_element: four-input LUT and selectable flip-flop</title>
+<desc>Exact logical connectivity of logic_element.sv: four mux4 groups select configuration bits with lut_data_in[1:0], a fifth mux4 selects the group with lut_data_in[3:2], and a mux2 chooses LUT output or external FF data. The flip-flop captures on rising clock edges and asynchronously resets to zero when reset_n_in is low. LUT and FF outputs are independent. Crossings without junction dots are unconnected. No internal configuration storage.</desc>
+<defs><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="black"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:black}.signal{font-style:italic}.wire{fill:none;stroke:black;stroke-width:1.5}.bus{fill:none;stroke:black;stroke-width:3}.block{fill:white;stroke:black;stroke-width:1.5}.dot{fill:black}</style>
+<text x="30" y="30" class="" text-anchor="start">logic_element - four-input LUT plus one flip-flop</text>
+<text x="30" y="55" class="" text-anchor="start">LUT address = lut_data_in[3:0]; bit 0 is least significant. Configuration comes from external storage.</text>
+<text x="510" y="90" class="signal" text-anchor="middle">lut_data_in[1:0]</text>
+<path d="M510 100 V900" class="bus"/>
+<polygon points="350,140 470,170 470,250 350,280" class="block"/>
+<text x="410" y="210" class="" text-anchor="middle">mux4</text>
+<text x="410" y="230" class="" text-anchor="middle">group 0</text>
+<text x="40" y="153" class="signal" text-anchor="start">lut_config_in[0]</text>
+<path d="M40 160 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="165" class="" text-anchor="start">00</text>
+<text x="40" y="186" class="signal" text-anchor="start">lut_config_in[1]</text>
+<path d="M40 193 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="198" class="" text-anchor="start">01</text>
+<text x="40" y="219" class="signal" text-anchor="start">lut_config_in[2]</text>
+<path d="M40 226 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="231" class="" text-anchor="start">10</text>
+<text x="40" y="252" class="signal" text-anchor="start">lut_config_in[3]</text>
+<path d="M40 259 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="264" class="" text-anchor="start">11</text>
+<path d="M510 300 H410 V265" class="bus" marker-end="url(#arrow)"/>
+<circle cx="510" cy="300" r="3" class="dot"/>
+<path d="M470 210 H540 V385 H680" class="wire" marker-end="url(#arrow)"/>
+<polygon points="350,340 470,370 470,450 350,480" class="block"/>
+<text x="410" y="410" class="" text-anchor="middle">mux4</text>
+<text x="410" y="430" class="" text-anchor="middle">group 1</text>
+<text x="40" y="353" class="signal" text-anchor="start">lut_config_in[4]</text>
+<path d="M40 360 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="365" class="" text-anchor="start">00</text>
+<text x="40" y="386" class="signal" text-anchor="start">lut_config_in[5]</text>
+<path d="M40 393 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="398" class="" text-anchor="start">01</text>
+<text x="40" y="419" class="signal" text-anchor="start">lut_config_in[6]</text>
+<path d="M40 426 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="431" class="" text-anchor="start">10</text>
+<text x="40" y="452" class="signal" text-anchor="start">lut_config_in[7]</text>
+<path d="M40 459 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="464" class="" text-anchor="start">11</text>
+<path d="M510 500 H410 V465" class="bus" marker-end="url(#arrow)"/>
+<circle cx="510" cy="500" r="3" class="dot"/>
+<path d="M470 410 H540 V445 H680" class="wire" marker-end="url(#arrow)"/>
+<polygon points="350,540 470,570 470,650 350,680" class="block"/>
+<text x="410" y="610" class="" text-anchor="middle">mux4</text>
+<text x="410" y="630" class="" text-anchor="middle">group 2</text>
+<text x="40" y="553" class="signal" text-anchor="start">lut_config_in[8]</text>
+<path d="M40 560 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="565" class="" text-anchor="start">00</text>
+<text x="40" y="586" class="signal" text-anchor="start">lut_config_in[9]</text>
+<path d="M40 593 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="598" class="" text-anchor="start">01</text>
+<text x="40" y="619" class="signal" text-anchor="start">lut_config_in[10]</text>
+<path d="M40 626 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="631" class="" text-anchor="start">10</text>
+<text x="40" y="652" class="signal" text-anchor="start">lut_config_in[11]</text>
+<path d="M40 659 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="664" class="" text-anchor="start">11</text>
+<path d="M510 700 H410 V665" class="bus" marker-end="url(#arrow)"/>
+<circle cx="510" cy="700" r="3" class="dot"/>
+<path d="M470 610 H540 V505 H680" class="wire" marker-end="url(#arrow)"/>
+<polygon points="350,740 470,770 470,850 350,880" class="block"/>
+<text x="410" y="810" class="" text-anchor="middle">mux4</text>
+<text x="410" y="830" class="" text-anchor="middle">group 3</text>
+<text x="40" y="753" class="signal" text-anchor="start">lut_config_in[12]</text>
+<path d="M40 760 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="765" class="" text-anchor="start">00</text>
+<text x="40" y="786" class="signal" text-anchor="start">lut_config_in[13]</text>
+<path d="M40 793 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="798" class="" text-anchor="start">01</text>
+<text x="40" y="819" class="signal" text-anchor="start">lut_config_in[14]</text>
+<path d="M40 826 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="831" class="" text-anchor="start">10</text>
+<text x="40" y="852" class="signal" text-anchor="start">lut_config_in[15]</text>
+<path d="M40 859 H350" class="wire" marker-end="url(#arrow)"/>
+<text x="360" y="864" class="" text-anchor="start">11</text>
+<path d="M510 900 H410 V865" class="bus" marker-end="url(#arrow)"/>
+<path d="M470 810 H565 V565 H680" class="wire" marker-end="url(#arrow)"/>
+<polygon points="680,365 800,395 800,575 680,605" class="block"/>
+<text x="690" y="390" class="" text-anchor="start">00</text>
+<text x="690" y="450" class="" text-anchor="start">01</text>
+<text x="690" y="510" class="" text-anchor="start">10</text>
+<text x="690" y="570" class="" text-anchor="start">11</text>
+<text x="755" y="478" class="" text-anchor="middle">mux4</text>
+<text x="755" y="500" class="" text-anchor="middle">LUT select</text>
+<path d="M740 730 V590" class="bus" marker-end="url(#arrow)"/>
+<text x="740" y="755" class="signal" text-anchor="middle">lut_data_in[3:2]</text>
+<path d="M800 485 H1000" class="wire" marker-end="url(#arrow)"/>
+<circle cx="850" cy="485" r="3" class="dot"/>
+<path d="M850 485 V310 H1390" class="wire" marker-end="url(#arrow)"/>
+<text x="1300" y="295" class="signal" text-anchor="start">lut_out</text>
+<polygon points="1000,455 1100,485 1100,565 1000,595" class="block"/>
+<text x="1010" y="490" class="" text-anchor="start">0</text>
+<text x="1010" y="570" class="" text-anchor="start">1</text>
+<text x="1050" y="530" class="" text-anchor="middle">mux2</text>
+<path d="M900 730 V565 H1000" class="wire" marker-end="url(#arrow)"/>
+<text x="900" y="755" class="signal" text-anchor="middle">ff_data_in</text>
+<path d="M1050 730 V580" class="wire" marker-end="url(#arrow)"/>
+<text x="1050" y="755" class="signal" text-anchor="middle">ff_select_config_in</text>
+<path d="M1100 525 H1190" class="wire" marker-end="url(#arrow)"/>
+<rect x="1190" y="475" width="140" height="150" class="block"/>
+<text x="1260" y="550" class="" text-anchor="middle">ff</text>
+<text x="1200" y="530" class="" text-anchor="start">D</text>
+<text x="1310" y="530" class="" text-anchor="start">Q</text>
+<path d="M1330 525 H1390" class="wire" marker-end="url(#arrow)"/>
+<text x="1340" y="510" class="signal" text-anchor="start">ff_out</text>
+<path d="M1190 577 L1202 585 L1190 593" class="wire"/>
+<path d="M1120 730 H1150 V585 H1184" class="wire" marker-end="url(#arrow)"/>
+<text x="1120" y="755" class="signal" text-anchor="start">clk_in</text>
+<text x="1208" y="590" class="" text-anchor="start">CLK</text>
+<circle cx="1260" cy="469" r="6" fill="white" stroke="black" stroke-width="1.5"/>
+<path d="M1260 390 V463" class="wire" marker-end="url(#arrow)"/>
+<text x="1260" y="375" class="signal" text-anchor="middle">reset_n_in</text>
+<text x="1260" y="497" class="" text-anchor="middle">RST</text>
+<text x="30" y="950" class="" text-anchor="start">ff_select_config_in = 0: LUT feeds FF. ff_select_config_in = 1: dedicated ff_data_in feeds FF.</text>
+<text x="30" y="975" class="" text-anchor="start">lut_out is always available. LUT-only use ignores ff_out; independent LUT + FF use selects the external FF input.</text>
+<text x="30" y="1000" class="" text-anchor="start">FF: rising-edge capture; asynchronous reset to zero when reset_n_in = 0. No output mux or internal configuration storage.</text>
+<text x="30" y="1025" class="" text-anchor="start">Filled dots indicate connections. Wire crossings without dots are unconnected. Thick lines are two-bit select buses.</text>
+</svg>
